@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src='{{ url_for('static', filename='sell.js') }}'></script>
+    <style>
+        #textentry {
+
+        }
+    </style>
+</head>
+<body>
+    <div id='ticketform' class='centeredcontainer'>
+        <div id='textentry'>
+            <span class='leftcol'>Ticket id:</span><label><input type='text' name='ticketid'/></label>
+        </div>
+        <div id='ticketkind'>
+            <label> <input type='radio' name='ticketkind' value='arc'/> ARC </label><br/>
+            <label> <input type='radio' name='ticketkind' value='member'/> Circus member </label><br/>
+            <label> <input type='radio' name='ticketkind' value='student'/> Student </label><br/>
+            <label>
+                <input type='radio' name='ticketkind' value='general'/>
+                General admission
+            </label><br/>
+        </div>
+        <div id='night'>
+            <label><input type='radio' name='ticketnight' value='1' />Thursday</label><br/>
+            <label><input type='radio' name='ticketnight' value='2' />Friday</label><br/>
+            <label><input type='radio' name='ticketnight' value='3' />Saturday</label><br/>
+        </div>
+        <input type='hidden' name='sellerid' value='{{ user }}' />
+        <input id='bookthatmofo' type='submit' value='Book!' />
+    </div>
+</body>
+</html>

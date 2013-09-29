@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}" />
+    <title></title>
+</head>
+<body>
+    <div id='infopage'>
+        <div id='sellbutton'><a href='{{ url_for('sell', user=user) }}'>SELL TICKETS NOW!</a></div>
+        <div id='centeredcontainer'>
+            <div id='salesinfo'>
+                <table id='salestable'>
+                <tr class='salesline'>
+                    <td class='daycol salesitem'>Night</td>
+                    <td class='salecol salesitem' style='white-space: nowrap'>Tickets Sold</td>
+                </tr>
+                {% for night, sales in sales %}
+                    <tr class='salesline'>
+                        <td class='daycol salesitem'>{{ night }}</td>
+                        <td class='salecol salesitem'>{{ sales }}/ {{ capacity }}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id='salespage'>
+
+    </div>
+    <div id='footer'>
+    </div>
+</body>
+</html>
