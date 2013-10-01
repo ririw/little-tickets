@@ -2,22 +2,23 @@ function bookthatmofo(){
     var ticketid = $('input[name="ticketid"]').val();
     var kind     = $('input[name="ticketkind"]:checked').val();
     var night    = $('input[name="ticketnight"]:checked').val();
-    var sellerid    = $('input[name="sellerid"]').val();
     if (ticketid==null ||
         kind==null ||
         night==null ||
-        sellerid==null ||
         ticketid==undefined ||
         kind==undefined ||
-        night==undefined ||
-        sellerid==undefined) {
+        night==undefined){
         alert("Fill in everything.")
     }
-    $.post('/chromatic/sellform',{ ticketid: ticketid, kind: kind, night: night, seller: sellerid}, function(){
-        alert("Success! We have secured the tickets!")
-    }).fail(function(){
+    $.post('/chromatic/sellform',{ ticketid: ticketid, kind: kind, night: night}, function(data){
+        if (data['success'] == true)
+            alert("Success! We have secured the tickets!");
+        else
+            alert("Ticketing failed: " + data['error']);
+
+    }, 'json').fail(function(){
         alert("Ticketing failed!")
-    })
+    });
 }
 
 $(document).ready(function(){

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Please log in:</title>
+</head>
+<body>
+    {% if error %}
+        <div style='color: red'>{{ error }}</div>
+    {% endif %}
+    <form method='POST' >
+        Username: <input type='text' name='user'/><br />
+        Password: <input type='password' name='pass'/><br />
+        <input type='submit' value='login'/>
+    </form>
+</body>
+</html>

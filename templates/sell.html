@@ -14,14 +14,18 @@
 <body>
     <div id='ticketform' class='centeredcontainer'>
         <div id='textentry'>
+            {% if ticket_id %}
+            <span class='leftcol'>Ticket id:</span><label><input type='text' name='ticketid' value='{{ ticket_id }}'/></label>
+            {% else %}
             <span class='leftcol'>Ticket id:</span><label><input type='text' name='ticketid'/></label>
+            {% endif %}
         </div>
         <div id='ticketkind'>
-            <label> <input type='radio' name='ticketkind' value='arc'/> ARC </label><br/>
-            <label> <input type='radio' name='ticketkind' value='member'/> Circus member </label><br/>
-            <label> <input type='radio' name='ticketkind' value='student'/> Student </label><br/>
+            <label> <input type='radio' name='ticketkind' value='1'/> ARC </label><br/>
+            <label> <input type='radio' name='ticketkind' value='2'/> Circus member </label><br/>
+            <label> <input type='radio' name='ticketkind' value='3'/> Student </label><br/>
             <label>
-                <input type='radio' name='ticketkind' value='general'/>
+                <input type='radio' name='ticketkind' value='4'/>
                 General admission
             </label><br/>
         </div>
@@ -30,7 +34,6 @@
             <label><input type='radio' name='ticketnight' value='2' />Friday</label><br/>
             <label><input type='radio' name='ticketnight' value='3' />Saturday</label><br/>
         </div>
-        <input type='hidden' name='sellerid' value='{{ user }}' />
         <input id='bookthatmofo' type='submit' value='Book!' />
     </div>
 </body>

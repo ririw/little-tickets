@@ -6,7 +6,7 @@
 </head>
 <body>
     <div id='infopage'>
-        <div id='sellbutton'><a href='{{ url_for('sell', user=user) }}'>SELL TICKETS NOW!</a></div>
+        <div id='sellbutton'><a href='{{ url_for('sell') }}'>SELL TICKETS NOW!</a></div>
         <div id='centeredcontainer'>
             <div id='salesinfo'>
                 <table id='salestable'>
@@ -27,7 +27,7 @@
     <div id='salespage'>
 
     </div>
-    <div id='footer'>
+    <div id='logout'><a href='{{ url_for('logout') }}'>Logout</a></div>
     </div>
 </body>
 </html>
