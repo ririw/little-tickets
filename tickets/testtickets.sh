@@ -1,4 +1,5 @@
 #!/bin/bash
+
 #while read p; do
   #echo $p
   #qrencode -t PNG -l m -o "codes/qrcode$p.out.png" "http://richardweiss.org/chromatic/ticket?ticket=$p"
@@ -13,13 +14,15 @@ listfiles="";
 
 for f in $FILES
 do
-   if ( echo $f | grep -q 'ticket' )
+   echo $f | grep 'test'
+
+   if ( echo $f | grep -q 'test' )
    then
       listfiles="$listfiles $f"
       if [ $i -eq 5 ]
       then
-         echo "convert $listfiles +append horizjoins/ticket$j.j1.jpg"
-         convert $listfiles \+append horizjoins/ticket$j.j1.jpg
+         echo "convert $listfiles +append test_horizjoins/ticket$j.j1.jpg"
+         convert $listfiles \+append test_horizjoins/ticket$j.j1.jpg
          listfiles=""
          i=0
          j=$(($j + 1))
@@ -27,8 +30,9 @@ do
       i=$(($i + 1))
    fi;
 done;
-echo "convert $listfiles +append horizjoins/ticket$j.j1.jpg"
-convert $listfiles \+append horizjoins/ticket$j.j1.jpg
+
+echo "convert $listfiles +append test_horizjoins/ticket$j.j1.jpg"
+convert $listfiles \+append test_horizjoins/ticket$j.j1.jpg
 listfiles=""
 i=0
 j=$(($j + 1))
@@ -36,7 +40,8 @@ j=$(($j + 1))
 
 
 
-FILES=./horizjoins/*
+
+FILES=./test_horizjoins/*
 i=1;
 j=1;
 listfiles="";
@@ -47,16 +52,16 @@ do
    if [ $i -eq 3 ]
    then
       echo $listfiles
-      convert $listfiles -append vertjoins/ticket$j.j1.jpg
+      convert $listfiles -append test_vertjoins/ticket$j.j1.jpg
       listfiles=""
       i=0
       j=$(($j + 1))
    fi
    i=$(($i + 1))
 done;
-
 echo $listfiles
-convert $listfiles -append vertjoins/ticket$j.j1.jpg
+convert $listfiles -append test_vertjoins/ticket$j.j1.jpg
 listfiles=""
 i=0
 j=$(($j + 1))
+

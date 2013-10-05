@@ -18,4 +18,4 @@ with open('ticketnames.txt','w') as tickets:
         tickets.write(''.join(it.imap(random.choice, it.repeat(letters, length))))
         tickets.write('\n')
     for i in range(10):
-        tickets.write('ticket%d\n' % i)
+        tickets.write('test%d\n' % i)
