@@ -213,7 +213,8 @@ def get_ticket_info(ticket_id):
 def ticketlink():
     ticket_id = request.args.get('ticket', None)
     if 'user' not in session:
-        return render_template('ticket_info_page.html', ticket_info=get_ticket_info(ticket_id))
+        #return render_template('ticket_info_page.html', ticket_info=get_ticket_info(ticket_id))
+        return redirect("https://www.facebook.com/events/209441325890771/")
     else:
         user = session['user']
         ticket_id = request.args.get('ticket', None)
