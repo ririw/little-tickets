@@ -52,7 +52,7 @@ do
    if [ $i -eq 3 ]
    then
       echo $listfiles
-      convert $listfiles -append test_vertjoins/ticket$j.j1.jpg
+      convert $listfiles -append test_vertjoins/ticket$j.j1.pdf
       listfiles=""
       i=0
       j=$(($j + 1))
@@ -60,8 +60,10 @@ do
    i=$(($i + 1))
 done;
 echo $listfiles
-convert $listfiles -append test_vertjoins/ticket$j.j1.jpg
+convert $listfiles -append test_vertjoins/ticket$j.j1.pdf
 listfiles=""
 i=0
 j=$(($j + 1))
 
+
+gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=alltesttickets.pdf test_vertjoin/*

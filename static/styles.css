@@ -8,7 +8,7 @@ body {
     display: none;
 }
 
-.centeredcontainer {
+#centeredcontainer {
     margin-left: auto;
     margin-right: auto;
     width: 300px;

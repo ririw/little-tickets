@@ -1,10 +1,11 @@
 #!/bin/bash
-#while read p; do
-  #echo $p
-  #qrencode -t PNG -l m -o "codes/qrcode$p.out.png" "http://richardweiss.org/chromatic/ticket?ticket=$p"
-  #convert -negate -resize 490x490 codes/qrcode$p.out.png codes/qrcode$p.out.png
-  #convert -gravity center -append ticket.jpg codes/qrcode$p.out.png tickets/coded_$p.out.png
-#done < ticketnames.txt
+
+while read p; do
+  echo $p
+  qrencode --foreground=FFFFFF --background=000000 -t PNG -l m -o "codes/qrcode$p.out.png" "http://richardweiss.org/chromatic/ticket?ticket=$p"
+  convert -resize 450x450 codes/qrcode$p.out.png -fill white -undercolor '#00000080' -font LMMonoLt10-Bold -pointsize 30 -gravity south -annotate +0+5 $p codes/qrcode$p.out.png
+  convert -gravity center ticket.jpg codes/qrcode$p.out.png -append tickets/coded_$p.out.png
+done < ticketnames.txt
 
 FILES=./tickets/*
 i=1;
@@ -18,8 +19,9 @@ do
       listfiles="$listfiles $f"
       if [ $i -eq 5 ]
       then
-         echo "convert $listfiles +append horizjoins/ticket$j.j1.jpg"
-         convert $listfiles \+append horizjoins/ticket$j.j1.jpg
+         ticketname=`printf '%02d' $j`
+         echo "convert $listfiles +append horizjoins/ticket$ticketname.j1.jpg"
+         convert $listfiles \+append horizjoins/ticket$ticketname.j1.jpg
          listfiles=""
          i=0
          j=$(($j + 1))
@@ -27,8 +29,9 @@ do
       i=$(($i + 1))
    fi;
 done;
-echo "convert $listfiles +append horizjoins/ticket$j.j1.jpg"
-convert $listfiles \+append horizjoins/ticket$j.j1.jpg
+ticketname=`printf '%02d' $j`
+echo "convert $listfiles +append horizjoins/ticket$ticketname.j1.jpg"
+convert $listfiles \+append horizjoins/ticket$ticketname.j1.jpg
 listfiles=""
 i=0
 j=$(($j + 1))
@@ -47,7 +50,8 @@ do
    if [ $i -eq 3 ]
    then
       echo $listfiles
-      convert $listfiles -append vertjoins/ticket$j.j1.jpg
+      ticketname=`printf '%02d' $j`
+      convert $listfiles -append vertjoins/ticket$ticketname.j1.pdf
       listfiles=""
       i=0
       j=$(($j + 1))
@@ -56,7 +60,10 @@ do
 done;
 
 echo $listfiles
-convert $listfiles -append vertjoins/ticket$j.j1.jpg
+ticketname=`printf '%02d' $j`
+convert $listfiles -append vertjoins/ticket$ticketname.j1.pdf
 listfiles=""
 i=0
 j=$(($j + 1))
+
+gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=alltickets.pdf vertjoins/*

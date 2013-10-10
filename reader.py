@@ -9,7 +9,7 @@ proc = zbar.Processor()
 proc.parse_config('enable')
 
 # initialize the Processor
-device = '/dev/video0'
+device = '/dev/video1'
 if len(argv) > 1:
     device = argv[1]
 proc.init(device)

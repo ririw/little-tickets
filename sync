@@ -1,0 +1,9 @@
+Chromatic.iml
+Chromatic.py
+reader.py
+requirements.txt
+static
+sync
+templates
+ticketnames.txt
+.git

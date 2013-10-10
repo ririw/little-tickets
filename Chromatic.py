@@ -5,12 +5,13 @@ import sqlite3
 from werkzeug.security import generate_password_hash, \
     check_password_hash
 from flask import Flask, render_template, request, abort, jsonify, session, redirect, url_for
+import random
 
 app = Flask(__name__,
             static_folder='./static',
             static_url_path='/chromatic/static')
-app.config['DEBUG'] = True
-app.debug = True
+app.config['DEBUG'] = False
+app.debug = False
 
 app.secret_key = '020c0fa6-ead3-47ac-a068-f23e62211f38-28c4d41e-db63-4601-aa89-f6c1283e1c43'
 
@@ -42,6 +43,11 @@ def init_db():
         descr TEXT,
         UNIQUE(descr) ON CONFLICT IGNORE,
         UNIQUE(id) ON CONFLICT IGNORE)''')
+    db.execute('''CREATE TABLE IF NOT EXISTS manualsale (
+        night INTEGER NOT NULL,
+        totalsales INTEGER NOT NULL,
+        FOREIGN KEY(night) REFERENCES night(id)
+    )''')
     db.execute('''CREATE TABLE IF NOT EXISTS sale (
         ticket_id TEXT NOT NULL,
         kind INTEGER NOT NULL,
@@ -108,6 +114,15 @@ def issold(db, ticket_id):
         return count != 0
 
 
+def totalsales(db, night):
+    with db, closing(db.cursor()) as cursor:
+        cursor.execute('SELECT COUNT(sale.ticket_id) FROM sale WHERE sale.night=?', (night,))
+        salescount = cursor.fetchone()[0]
+        cursor.execute('SELECT IFNULL(SUM(totalsales),0) FROM manualsale WHERE night=?', (night,))
+        manualcount = cursor.fetchone()[0]
+        return salescount+manualcount
+
+
 def sellticket(seller, kind, night, ticket):
     db = dbconnect()
     with db, closing(db.cursor()) as cursor:
@@ -118,6 +133,10 @@ def sellticket(seller, kind, night, ticket):
             return "Not found"
         if ticket_id is not None and issold(db, ticket_id):
             return 'Sold already!'
+        if totalsales(db, night) > 60:
+            return 'That night is sold out!!'
+        if kind < 1 or kind > 4:
+            return 'That is not a valid ticket type'
         print("User %s is selling ticket %s on night %s as %s" % (seller_id, ticket_id, night, kind))
         if seller_id is None or ticket_id is None:
             return 'Not found'
@@ -142,6 +161,13 @@ def getsales():
             WHERE sale.cancelled = 0 GROUP BY night.night''')
         for night, tickets in cursor:
             nights[night] = tickets
+        cursor.execute('''
+            SELECT night.night,IFNULL(sum(totalsales), 0) FROM
+                night LEFT JOIN
+                manualsale ON night.id=manualsale.night
+            GROUP BY night.id; ''')
+        for night, tickets in cursor:
+            nights[night] += tickets
     return [
         ('Thursday', nights['2013-10-10']),
         ('Friday', nights['2013-10-11']),
@@ -231,6 +257,30 @@ def check_user_credentials(user, password):
             return False
         else:
             return check_password_hash(pw[0], password)
+
+
+@app.route('/chromatic/adduser', methods=['GET','POST'])
+def adduser():
+    if request.method == 'POST':
+        form = request.form
+        if 'user' not in form or 'password' not in form:
+            return render_template('create.html', error='Please fill in all fields')
+        else:
+            if 'user' in session and session['user'] == 'riri':
+                db = dbconnect()
+                with db, closing(db.cursor()) as cursor:
+                    print "HERE"
+                    print generate_password_hash(form['password'])
+                    print random.randint(1000, 1000000)
+                    cursor.execute('''INSERT INTO user VALUES (NULL, ?, ?, ?)''',
+                                   (form['user'],
+                                    generate_password_hash(form['password']),
+                                    random.randint(1000, 1000000)))
+                return render_template('create.html', error='Success!')
+            else:
+                return render_template('create.html', error='You can\'t do that!')
+    else:
+        return render_template('create.html', error=None)
 
 
 @app.route('/chromatic/login', methods=['GET', 'POST'])
