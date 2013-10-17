@@ -204,7 +204,7 @@ def sellform():
     if 'kind' not in form or 'night' not in form or 'ticketid' not in form:
         return jsonify({'success': False, 'error': 'Other'})
     else:
-        kind = form['kind']
+        kind = int(form['kind'])
         night = form['night']
         ticketid = form['ticketid']
         result = sellticket(user, kind, night, ticketid)
